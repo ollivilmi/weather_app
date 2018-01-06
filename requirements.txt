@@ -6,6 +6,8 @@ click==6.7
 cryptography==2.1.4
 -e git+https://github.com/django/django.git@777f216d555496798a1e65fd899b0f8a0349aeca#egg=Django
 Flask==0.12.2
+flask-heroku==0.1.9
+Flask-SQLAlchemy==2.3.2
 gunicorn==19.7.1
 idna==2.6
 itsdangerous==0.24
@@ -17,5 +19,6 @@ pyOpenSSL==17.5.0
 pytz==2017.3
 requests==2.18.4
 six==1.11.0
+SQLAlchemy==1.2.0
 urllib3==1.22
 Werkzeug==0.14.1
