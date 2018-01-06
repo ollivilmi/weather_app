@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+	<h1>Sää</h1>
+	<table>
+		<caption>Yleisesti</caption>
+		<thead>
+			<th>Location</th>
+			<th>Low C</th>
+			<th>High C</th>
+			<th>Current C</th>
+		</thead>
+		<br/>
+		<tbody>
+			{% for location in locations %}
+			<tr>
+				<td>{{ location.name }}</td>
+				<td>{{ location.low }}</td>
+				<td>{{ location.high }}</td>
+				<td>{{ location.current }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
