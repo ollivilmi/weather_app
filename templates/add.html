@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add
+{% endblock %}
+
+{% block main %}
+	<h1>Lisää lämpötila</h1>
+		<form action="{{ url_for('add') }}" method="post">
+			<fieldset>
+				<div class="form-group">
+					<select name="location">
+						{% for l in loc %}
+						<option value="{{ l.id }}">{{ l.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="form-group">
+					<input type=number min=0 value=0 name="temp" placeholder="Celsius"/>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-default" type="submit">Lisää</button>
+				</div>
+			</fieldset>
+		</form>
+{% endblock %}
