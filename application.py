@@ -1,22 +1,19 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for, g
 import os
-import sqlite3
+from flask_sqlalchemy import SQLAlchemy
+#import sqlite3
 
 app = Flask(__name__)
-app.database = "website.db"
-app.secret_key = "topsecret"
+app.config.from_object(os.environ['APP_SETTINGS'])
+db = SQLAlchemy(app)
+
+from models import *
 
 @app.route("/")
 def index():
-	try:
-		g.db = connect_db()
-		cur = g.db.execute("""SELECT name, tmin, tmax, tcurrent FROM Location 
-		JOIN CurrentTemperatures ON Location.id = location_id""")
-		loc = [dict(name=row[0], tmin=row[1], tmax=row[2], tcur=row[3]) for row in cur.fetchall()]
-		g.db.close()
-		return render_template("index.html", loc=loc)
-	except:
-		return "Database not working"
+	loc = db.session.query(Locations.name, TempCurrent.tmin, TempCurrent.tmax,\
+	TempCurrent.tcurrent).join(TempCurrent, Locations.id == TempCurrent.location_id).all()
+	return render_template("index.html", loc=loc)
 	
 @app.route("/about")
 def about():
@@ -25,22 +22,19 @@ def about():
 @app.route("/more", methods=["GET", "POST"])
 def more():
 	if request.method == "GET":
-		return render_template("more.html", loc=list_countries())
+		return render_template("more.html", loc=get_locations())
 	else:
 		loc = request.form.get("location")
 		if loc == None:
 			return "ERROR, no location"
 			
-		g.db = connect_db()
-		cur = g.db.execute("""SELECT * FROM Temperatures WHERE location_id = ?""", loc)
-		data = [dict(temp=row[2],date=row[3]) for row in cur.fetchall()]
-		g.db.close()
-		return render_template("more.html", loc=list_countries(), data=data)
+		data = db.session.query(TempHistory).filter(TempHistory.location_id == loc).all()
+		return render_template("more.html", loc=get_locations(), data=data)
     
 @app.route("/add", methods=["GET", "POST"])
 def add():
 	if request.method == "GET":
-		return render_template("add.html", loc=list_countries())
+		return render_template("add.html", loc=get_locations())
 	else:
 		temp = request.form.get("temp")
 		loc = request.form.get("location")
@@ -49,28 +43,24 @@ def add():
 		elif loc == None:
 			return "ERROR, no location"
 		
-		g.db = connect_db()
-		g.db.execute("""INSERT INTO Temperatures (location_id, temperature) VALUES (?,?)""", (temp, loc))
-		g.db.execute("""UPDATE CurrentTemperatures SET tcurrent = ? WHERE location_id = ?""",(temp, loc)) 
+		# Add temp to history table
+		db.session.add(TempHistory(loc, temp))
 		
-		cur = g.db.execute("""SELECT tmax, tmin FROM CurrentTemperatures WHERE location_id = ?""", loc)
-		records = cur.fetchall()
+		# Add temp to current and check if the temp is a new record
+		cur = db.session.query(TempCurrent).filter(TempCurrent.location_id == loc).first()
+		cur.tcurrent = temp
 		
-		if float(temp) > float(records[0][0]):
-			g.db.execute("""UPDATE CurrentTemperatures SET tmax = ? WHERE location_id = ?""", (temp, loc))
-		elif float(temp) < float(records[0][1]):
-			g.db.execute("""UPDATE CurrentTemperatures SET tmin = ? WHERE location_id = ?""", (temp, loc))
-		return render_template("add.html", loc=list_countries())
+		if float(temp) > float(cur.tmax):
+			cur.tmax = temp
+		elif float(temp) < float(cur.tmin):
+			cur.tmin = temp
+			
+		db.session.commit()
+		
+		return render_template("add.html", loc=get_locations())
 	
-def connect_db():
-	return sqlite3.connect(app.database, isolation_level=None)
-	
-def list_countries():
-	g.db = connect_db()
-	cur = g.db.execute("""SELECT id, name FROM LOCATION""")
-	loc = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
-	g.db.close()
-	return loc
+def get_locations():
+	return db.session.query(Locations.id, Locations.name).all()
 	
 if __name__ == "__main__":
 	app.run(debug=True)
