@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for, g
 import os
 from flask_sqlalchemy import SQLAlchemy
-#import sqlite3
+import psycopg2
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])

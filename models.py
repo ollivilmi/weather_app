@@ -1,5 +1,7 @@
 from application import db
 from datetime import datetime
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
 class Locations(db.Model):
 

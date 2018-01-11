@@ -1,7 +1,3 @@
 venv
 *.pyc
-*.db
-sqlite3.exe
-website.db
-versions
-sql.py
+old_versions
