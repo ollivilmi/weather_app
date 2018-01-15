@@ -1,6 +1,4 @@
-from app import db
-from datetime import datetime, timedelta
-from models import *
+from app import *
 
 def get_locations():
 	return db.session.query(Locations.id, Locations.name).all()
