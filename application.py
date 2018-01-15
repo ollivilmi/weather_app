@@ -18,27 +18,28 @@ def index():
 	TempCurrent.tcurrent, TempCurrent.date).join(TempCurrent, Locations.id == TempCurrent.location_id).all()
 	return render_template("index.html", loc=loc)
 	
-@app.route("/about")
+@app.route("/about", methods=["GET", "POST"])
 def about():
-    return "TODO"
-    
-@app.route("/more", methods=["GET", "POST"])
-def more():
 	if request.method == "GET":
-		return render_template("more.html", loc=get_locations())
+		return render_template("about.html", loc=get_locations())
+    
+@app.route("/history", methods=["GET", "POST"])
+def history():
+	if request.method == "GET":
+		return render_template("history.html", loc=get_locations())
 	else:
 		loc = request.form.get("location")
 		if loc == None:
-			return "ERROR, no location"
+			raise RunTimeError("missing location")
 		days = request.form.get("days")
 		if days == None:
-			return "ERROR, no days"
+			raise RunTimeError("missing amount of days")
 		days = int(days)
 		
 		timespan = datetime.utcnow() - timedelta(days=days)
 			
 		data = db.session.query(TempHistory).filter(TempHistory.location_id == loc, TempHistory.date > timespan).all()
-		return render_template("more.html", loc=get_locations(), data=data)
+		return render_template("history.html", loc=get_locations(), data=data)
     
 @app.route("/add", methods=["GET", "POST"])
 def add():
@@ -48,9 +49,9 @@ def add():
 		temp = request.form.get("temp")
 		loc = request.form.get("location")
 		if temp == None:
-			return "ERROR, no temperature"
+			raise RunTimeError("no temperature to add")
 		elif loc == None:
-			return "ERROR, no location"
+			raise RunTimeError("no location to add to")
 		
 		# Add temp to history table
 		db.session.add(TempHistory(loc, temp))
