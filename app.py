@@ -4,7 +4,6 @@ import os
 import re
 from flask_sqlalchemy import SQLAlchemy
 from flask_jsglue import JSGlue
-from appfunctions import *
 
 import psycopg2
 
