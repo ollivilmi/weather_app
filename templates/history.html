@@ -9,21 +9,19 @@
 		<form id="gethistory">
 			<fieldset>
 				<div class="form-group">
-					<select name="location">
+					<select name="location" id="loc">
 						{% for l in loc %}
 						<option value="{{ l.id }}">{{ l.name }}</option>
 						{% endfor %}
 					</select>
 				</div>
 				<div class="form-group"> Päivää sitten:
-					<input type="number" name="days" min=0 value=1 placeholder="1"/>
+					<input type="number" id="days" name="days" min=0 value=1 placeholder="1"/>
 				</div>
 				<div class="form-group">
 					<button class="btn btn-default" type="submit">Hae</button>
 				</div>
 			</fieldset>
 		</form>
-		{% for d in data %}
-			<p>Lämpötila: {{ d.temp }} Päivämäärä: {{ d.date }}</p>
-		{% endfor %}
+			<div id="historyresults"></div>
 {% endblock %}

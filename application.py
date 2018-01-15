@@ -1,11 +1,14 @@
-from flask import Flask, flash, redirect, render_template, request, session, url_for, g
+from flask import Flask, flash, redirect, render_template, request, session, url_for, g, jsonify
 from datetime import datetime, timedelta
 import os
+import re
 from flask_sqlalchemy import SQLAlchemy
+from flask_jsglue import JSGlue
 
 import psycopg2
 
 app = Flask(__name__)
+JSGlue(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 db = SQLAlchemy(app)
 
@@ -27,19 +30,23 @@ def about():
 def history():
 	if request.method == "GET":
 		return render_template("history.html", loc=get_locations())
-	else:
-		loc = request.form.get("location")
-		if loc == None:
-			raise RunTimeError("missing location")
-		days = request.form.get("days")
-		if days == None:
-			raise RunTimeError("missing amount of days")
-		days = int(days)
 		
-		timespan = datetime.utcnow() - timedelta(days=days)
-			
-		data = db.session.query(TempHistory).filter(TempHistory.location_id == loc, TempHistory.date > timespan).all()
-		return render_template("history.html", loc=get_locations(), data=data)
+@app.route("/gethistory")
+def gethistory():
+	loc = request.args.get("loc")
+	if loc == None:
+		raise RunTimeError("missing location")
+	days = request.args.get("days")
+	if days == None:
+		raise RunTimeError("missing amount of days")
+	days = int(days)
+	
+	timespan = datetime.utcnow() - timedelta(days=days)
+		
+	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc, TempHistory.date > timespan).all()
+	history = [dict(temp=row.temp,date=row.date) for row in data]
+	
+	return jsonify(history)
     
 @app.route("/add", methods=["GET", "POST"])
 def add():

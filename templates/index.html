@@ -12,7 +12,7 @@
 			<th>Havaintopiste</th>
 			<th>Max</th>
 			<th>Min</th>
-			<th>Uusin</th>
+			<th>Nyt</th>
 			<th>Viimeisin pvm</th>
 		</thead>
 		<br/>
@@ -20,9 +20,9 @@
 			{% for l in loc %}
 				<tr>
 					<td>{{ l.name }}</td>
-					<td>{{ l.tmax }}</td>
-					<td>{{ l.tmin }}</td>
-					<td>{{ l.tcurrent }}</td>
+					<td>{{ l.tmax }}°C</td>
+					<td>{{ l.tmin }}°C</td>
+					<td>{{ l.tcurrent }}°C</td>
 					<td>{{ l.date }}</td>
 				</tr>
 			{% endfor %}
