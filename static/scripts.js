@@ -7,7 +7,6 @@ $(document).ready(function() {
 
 		$.getJSON(url, function(data) 
 		{
-			console.log(data);
 			for (var i = 0; i < data.length; i++)
 			{
 				results += "<p>Lämpötila: "+data[i].temp+"°C, pvm: "+data[i].date+"</p>";

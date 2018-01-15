@@ -36,6 +36,7 @@ def gethistory():
 	loc = request.args.get("loc")
 	if loc == None:
 		raise RunTimeError("missing location")
+		
 	days = request.args.get("days")
 	if days == None:
 		raise RunTimeError("missing amount of days")

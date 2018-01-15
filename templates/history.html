@@ -15,13 +15,25 @@
 						{% endfor %}
 					</select>
 				</div>
-				<div class="form-group"> Päivää sitten:
-					<input type="number" id="days" name="days" min=0 value=1 placeholder="1"/>
+				<div class="slidecontainer" id="slider">
+					<input type="range" id="days" name="days" min=0 max=30 value=1 placeholder="1"/>
 				</div>
+				<p id="slidervalue"></p>
 				<div class="form-group">
 					<button class="btn btn-default" type="submit">Hae</button>
 				</div>
 			</fieldset>
 		</form>
 			<div id="historyresults"></div>
+			<script>
+			$(function() {
+				var slider = document.getElementById("days");
+				var output = document.getElementById("slidervalue");
+				output.innerHTML = slider.value;
+				
+				slider.oninput = function() {
+					output.innerHTML = this.value;
+				}
+			});
+			</script>
 {% endblock %}
