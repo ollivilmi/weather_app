@@ -66,7 +66,7 @@ thead {
 }
 
 table {
-    width: 40%;
+    width: 45%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -83,6 +83,7 @@ td {
 
 th {
     height: 30px;
+	width: 40px;
 }
 
 ul {

@@ -7,12 +7,13 @@
 {% block main %}
 	<h1>Sää</h1>
 	<table>
-		<caption>Yleisesti</caption>
+		<caption>Viimeiset 24 tuntia (tai viimeisin havainto)</caption>
 		<thead>
 			<th>Havaintopiste</th>
 			<th>Max</th>
 			<th>Min</th>
-			<th>Nykyinen</th>
+			<th>Uusin</th>
+			<th>Viimeisin pvm</th>
 		</thead>
 		<br/>
 		<tbody>
@@ -22,6 +23,7 @@
 					<td>{{ l.tmax }}</td>
 					<td>{{ l.tmin }}</td>
 					<td>{{ l.tcurrent }}</td>
+					<td>{{ l.date }}</td>
 				</tr>
 			{% endfor %}
 		</tbody>

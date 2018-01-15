@@ -39,15 +39,17 @@ class TempCurrent(db.Model):
 	tmax = db.Column(db.Float, nullable=False)
 	tmin = db.Column(db.Float, nullable=False)
 	tcurrent = db.Column(db.Float, nullable=False)
+	date = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
 	location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=False)
 	locations = db.relationship('Locations', backref=db.backref('tempcurrent', lazy=True))
 	
-	def __init__(self, location_id, tmax, tmin, tcurrent):
+	def __init__(self, location_id, tmax, tmin, tcurrent, date):
 		self.location_id = location_id
 		self.tmax = tmax
 		self.tmin = tmin
 		self.tcurrent = tcurrent
+		self.date = date
 		
 	def __repr__(self):
-		return '<Location ID: {} TMax: {} TMin: {} TCurrent: {}>'.format(self.location_id,self.tmax,self.tmin,self.tcurrent)
+		return '<Location ID: {} TMax: {} TMin: {} TCurrent: {} Date: {}>'.format(self.location_id,self.tmax,self.tmin,self.tcurrent,self.date)
 	
