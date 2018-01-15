@@ -4,6 +4,7 @@ import os
 import re
 from flask_sqlalchemy import SQLAlchemy
 from flask_jsglue import JSGlue
+from appfunctions import *
 
 import psycopg2
 
@@ -78,30 +79,6 @@ def add():
 		
 		return render_template("add.html", loc=get_locations())
 	
-def get_locations():
-	return db.session.query(Locations.id, Locations.name).all()
-
-def update_temprecords():
-	
-	timespan = datetime.utcnow() - timedelta(hours=24)
-	
-	# Update max/min temps from last 24 hours
-	for i in range(1,6):
-		loc = db.session.query(TempHistory.temp)\
-		.filter(TempHistory.location_id == i, (TempHistory.date > timespan)).all()
-		
-		cur = db.session.query(TempCurrent).filter(TempCurrent.location_id == i).first()
-		
-		if loc:
-			cur.tmax = max(loc)
-			cur.tmin = min(loc)
-			db.session.commit()
-		else:
-			cur.tmax = cur.tcurrent
-			cur.tmin = cur.tcurrent
-			db.session.commit()
-			
-	
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run()
 	

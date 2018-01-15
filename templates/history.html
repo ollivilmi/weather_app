@@ -24,16 +24,6 @@
 				</div>
 			</fieldset>
 		</form>
-			<div id="historyresults"></div>
-			<script>
-			$(function() {
-				var slider = document.getElementById("days");
-				var output = document.getElementById("slidervalue");
-				output.innerHTML = slider.value;
-				
-				slider.oninput = function() {
-					output.innerHTML = this.value;
-				}
-			});
-			</script>
+		<div id="historyresults"></div>
+		<script src="{{ url_for('static', filename='scripts_history.js') }}"></script>
 {% endblock %}

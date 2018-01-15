@@ -1,4 +1,4 @@
-from application import db
+from app import db
 from models import Locations, TempHistory, TempCurrent
 from datetime import datetime
 
