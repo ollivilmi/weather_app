@@ -48,7 +48,18 @@ def gethistory():
 	history = [dict(temp=row.temp,date=row.date) for row in data]
 	
 	return jsonify(history)
-    
+	
+@app.route("/getlocation")
+def getlocation():
+	loc = request.args.get("loc")
+	if loc == None:
+		raise RunTimeError("missing location")
+		
+	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc).order_by(TempHistory.id.desc()).limit(10).all()
+	temps = [dict(temp=row.temp, date=row.date) for row in data]
+	
+	return jsonify(temps)
+	
 @app.route("/add", methods=["GET", "POST"])
 def add():
 	if request.method == "GET":

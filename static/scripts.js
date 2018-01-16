@@ -14,6 +14,39 @@ $(document).ready(function() {
 			$('#historyresults').html(results);
 		});
 		return false;
+	});
+	
+	$('#getlocation').submit(function()
+	{
+		var url = Flask.url_for("getlocation")+"?loc="+$('#location').val();
 		
+		$.getJSON(url, function(tempquery)
+		{
+			var dates = [];
+			var temps = [];
+		
+			var ctx = document.getElementById('tempChart').getContext('2d');
+			
+			for (var i = 0; i < tempquery.length; i++)
+			{
+				dates.push(tempquery[i].date);
+				temps.push(tempquery[i].temp);
+			}
+
+			var tempChart = new Chart(ctx,{
+				type: 'line',
+				data: {
+					labels: dates,
+					datasets: [{
+						label: "Latest temperatures",
+						backgroundColor: 'rgb(255, 99, 132)',
+						borderColor: 'rgb(255, 99, 132)',
+						data: temps,
+					}]
+				},
+			});
+			
+		});
+		return false;
 	});
 });

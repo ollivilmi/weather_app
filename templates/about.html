@@ -5,11 +5,14 @@
 {% endblock %}
 
 {% block main %}
+	<!--Chart.js to graph location's most recent temperatures-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>	
+	
 	<h1>Havaintopisteet</h1>
-		<form action="{{ url_for('about') }}" method="post">
+		<form id="getlocation">
 			<fieldset>
 				<div class="form-group">
-					<select name="location">
+					<select name="location" id="location">
 						{% for l in loc %}
 						<option value="{{ l.id }}">{{ l.name }}</option>
 						{% endfor %}
@@ -20,7 +23,5 @@
 				</div>
 			</fieldset>
 		</form>
-		{% for d in data %}
-			<p>Lämpötila: {{ d.temp }} Päivämäärä: {{ d.date }}</p>
-		{% endfor %}
+		<canvas id="tempChart"></canvas>
 {% endblock %}
