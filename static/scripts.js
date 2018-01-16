@@ -36,12 +36,12 @@ $(document).ready(function() {
 			var tempChart = new Chart(ctx,{
 				type: 'line',
 				data: {
-					labels: dates,
+					labels: dates.reverse(),
 					datasets: [{
 						label: "Latest temperatures",
 						backgroundColor: 'rgb(255, 99, 132)',
 						borderColor: 'rgb(255, 99, 132)',
-						data: temps,
+						data: temps.reverse(),
 					}]
 				},
 			});

@@ -55,7 +55,7 @@ def getlocation():
 	if loc == None:
 		raise RunTimeError("missing location")
 		
-	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc).order_by(TempHistory.id.desc()).limit(10).all()
+	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc).order_by(TempHistory.date.desc()).limit(10).all()
 	temps = [dict(temp=row.temp, date=row.date) for row in data]
 	
 	return jsonify(temps)
