@@ -9,7 +9,7 @@ $(document).ready(function() {
 		{
 			for (var i = 0; i < data.length; i++)
 			{
-				results += "<p>Lämpötila: "+data[i].temp+"°C, pvm: "+data[i].date+"</p>";
+				results += "<li class='list-group-item'>Lämpötila: "+data[i].temp+"°C, pvm: "+data[i].date+"</li>";
 			}
 			$('#historyresults').html(results);
 		});
@@ -19,12 +19,12 @@ $(document).ready(function() {
 	$('#getlocation').submit(function()
 	{
 		var url = Flask.url_for("getlocation")+"?loc="+$('#location').val();
-		
+			
 		$.getJSON(url, function(tempquery)
 		{
 			var dates = [];
 			var temps = [];
-		
+
 			var ctx = document.getElementById('tempChart').getContext('2d');
 			
 			for (var i = 0; i < tempquery.length; i++)
@@ -38,14 +38,31 @@ $(document).ready(function() {
 				data: {
 					labels: dates.reverse(),
 					datasets: [{
-						label: "Latest temperatures",
-						backgroundColor: 'rgb(255, 99, 132)',
-						borderColor: 'rgb(255, 99, 132)',
+						label: "Uusimmat havainnot",
+						fill: false,
+						borderColor: 'rgb(173,216,230)',
 						data: temps.reverse(),
 					}]
 				},
+				options: {
+					scales:
+					{
+						xAxes: [{
+							display: false
+						}]
+					}
+				}
 			});
 			
+		});
+		url = Flask.url_for("getrecords")+"?loc="+$('#location').val();
+
+		$.getJSON(url, function(recordquery)
+		{
+		$('#tempRecords').html("<li class='list-group-item'>Korkein: "+recordquery.max+"&deg;C</li>"
+		+"<li class='list-group-item'> Matalin: "+recordquery.min+"&deg;C</li>"
+		+"<li class='list-group-item'> Keskiarvo: " +Math.round(recordquery.avg*100)/100+"&deg;C</li>");
+
 		});
 		return false;
 	});

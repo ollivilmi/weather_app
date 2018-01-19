@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 import os
 import re
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from flask_jsglue import JSGlue
+from statistics import mean
 
 import psycopg2
 
@@ -34,8 +36,7 @@ def history():
 @app.route("/gethistory")
 def gethistory():
 	loc = request.args.get("loc")
-	if loc == None:
-		raise RunTimeError("missing location")
+	null_check(loc, "location")
 		
 	days = request.args.get("days")
 	if days == None:
@@ -52,13 +53,27 @@ def gethistory():
 @app.route("/getlocation")
 def getlocation():
 	loc = request.args.get("loc")
-	if loc == None:
-		raise RunTimeError("missing location")
+	null_check(loc, "location")
 		
 	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc).order_by(TempHistory.date.desc()).limit(10).all()
 	temps = [dict(temp=row.temp, date=row.date) for row in data]
 	
 	return jsonify(temps)
+
+@app.route("/getrecords")
+def getrecords():
+	loc = request.args.get("loc")
+	null_check(loc, "location")
+
+	temps = db.session.query(
+	func.max(TempHistory.temp),
+	func.min(TempHistory.temp),
+	func.avg(TempHistory.temp)).filter(TempHistory.location_id == loc).all()
+	
+	records = {"max":temps[0][0], "min":temps[0][1], "avg":temps[0][2]}
+
+	return jsonify(records)
+
 	
 @app.route("/add", methods=["GET", "POST"])
 def add():
@@ -67,10 +82,8 @@ def add():
 	else:
 		temp = request.form.get("temp")
 		loc = request.form.get("location")
-		if temp == None:
-			raise RunTimeError("no temperature to add")
-		elif loc == None:
-			raise RunTimeError("no location to add to")
+		null_check(temp, "temperature")
+		null_check(loc, "location")
 		
 		# Add temp to history table
 		db.session.add(TempHistory(loc, temp))
@@ -91,6 +104,10 @@ def add():
 		
 def get_locations():
 	return db.session.query(Locations.id, Locations.name).all()
+
+def null_check(argument, name):
+	if argument == None:
+		raise RunTimeError(name + " missing")
 
 def update_temprecords():
 	
