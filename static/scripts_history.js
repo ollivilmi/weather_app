@@ -1,4 +1,6 @@
 $(function() {
+	// Script for the slider
+
 	var slider = document.getElementById("days");
 	var output = document.getElementById("slidervalue");
 	var selection = document.getElementById("loc");

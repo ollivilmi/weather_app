@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	
+	// Builds a list from TempHistory filtered by amount of days selected by the user.
 	$('#gethistory').submit(function() 
 	{
 		var url = Flask.url_for("gethistory")+"?loc="+$('#loc').val()+"&days="+$('#days').val();
@@ -16,6 +17,8 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	// AJAX1 - Gets the last 10 results for the location to build a temperature graph
+	// AJAX2 - Gets all time max/min/avg temperatures for the location
 	$('#getlocation').submit(function()
 	{
 		var url = Flask.url_for("getlocation")+"?loc="+$('#location').val();

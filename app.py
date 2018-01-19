@@ -5,8 +5,6 @@ import re
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_jsglue import JSGlue
-from statistics import mean
-
 import psycopg2
 
 app = Flask(__name__)
@@ -16,6 +14,7 @@ db = SQLAlchemy(app)
 
 from models import *
 
+# Opening the main page updates and shows a table of min/max temperatures during the last 24 hours
 @app.route("/")
 def index():
 	update_temprecords()
@@ -23,24 +22,22 @@ def index():
 	TempCurrent.tcurrent, TempCurrent.date).join(TempCurrent, Locations.id == TempCurrent.location_id).all()
 	return render_template("index.html", loc=loc)
 	
-@app.route("/about", methods=["GET", "POST"])
+@app.route("/about")
 def about():
-	if request.method == "GET":
 		return render_template("about.html", loc=get_locations())
     
-@app.route("/history", methods=["GET", "POST"])
+@app.route("/history")
 def history():
-	if request.method == "GET":
-		return render_template("history.html", loc=get_locations())
+	return render_template("history.html", loc=get_locations())
 		
+# Returns temp history for a location filtered by amount of days
 @app.route("/gethistory")
 def gethistory():
 	loc = request.args.get("loc")
-	null_check(loc, "location")
-		
+	null_check(loc, "location")	
 	days = request.args.get("days")
-	if days == None:
-		raise RunTimeError("missing amount of days")
+	null_check(days, "days")
+
 	days = int(days)
 	
 	timespan = datetime.utcnow() - timedelta(days=days)
@@ -49,7 +46,8 @@ def gethistory():
 	history = [dict(temp=row.temp,date=row.date) for row in data]
 	
 	return jsonify(history)
-	
+
+# Gets up to 10 of the latest temperatures for a given location. Script uses this to build a temperature graph
 @app.route("/getlocation")
 def getlocation():
 	loc = request.args.get("loc")
@@ -60,6 +58,7 @@ def getlocation():
 	
 	return jsonify(temps)
 
+# Returns lifetime max, min and avg for a location.
 @app.route("/getrecords")
 def getrecords():
 	loc = request.args.get("loc")
@@ -74,7 +73,7 @@ def getrecords():
 
 	return jsonify(records)
 
-	
+# User can add new temperatures via the POST method
 @app.route("/add", methods=["GET", "POST"])
 def add():
 	if request.method == "GET":
@@ -102,6 +101,7 @@ def add():
 		
 		return render_template("add.html", loc=get_locations())
 		
+# Used for building the drop down menus for locations
 def get_locations():
 	return db.session.query(Locations.id, Locations.name).all()
 
@@ -109,6 +109,8 @@ def null_check(argument, name):
 	if argument == None:
 		raise RunTimeError(name + " missing")
 
+# Checks the database for the records during the last 24 hours and updates them to the CurrentTemps table.
+# This is called when the index page is opened.
 def update_temprecords():
 	
 	timespan = datetime.utcnow() - timedelta(hours=24)
@@ -123,11 +125,10 @@ def update_temprecords():
 		if loc:
 			cur.tmax = max(loc)
 			cur.tmin = min(loc)
-			db.session.commit()
 		else:
 			cur.tmax = cur.tcurrent
 			cur.tmin = cur.tcurrent
-			db.session.commit()
+		db.session.commit()
 	
 if __name__ == "__main__":
 	app.run()
