@@ -9,9 +9,4 @@ $(function() {
 	slider.oninput = function() {
 		output.innerHTML = this.value;
 	}
-	
-	selection.onchange = function() {
-		slider.value = 1;
-		output.innerHTML = 1;
-	}
 });

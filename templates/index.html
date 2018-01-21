@@ -28,4 +28,12 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	<form action="{{ url_for('index') }}" method="post">
+			<fieldset>
+				<div class="form-group">
+					<h4>Lisää satunnaisia lämpötiloja <small>(testaamista varten)</small></h4>
+					<button class="btn btn-default" type="submit">Lisää</button>
+				</div>
+			</fieldset>
+		</form>
 {% endblock %}

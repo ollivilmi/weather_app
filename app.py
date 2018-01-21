@@ -2,6 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from datetime import datetime, timedelta
 import os
 import re
+import random
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_jsglue import JSGlue
@@ -15,9 +16,15 @@ db = SQLAlchemy(app)
 from models import *
 
 # Opening the main page updates and shows a table of min/max temperatures during the last 24 hours
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-	update_temprecords(24)
+	if request.method == "GET":
+		update_temprecords(24)
+	else:
+		for i in range (1, 6):
+			for j in range (0, 10):
+				add_temperature(round(random.uniform(-25, 35), 2), i)
+			
 	loc = db.session.query(Locations.name, TempCurrent.tmin, TempCurrent.tmax,\
 	TempCurrent.tcurrent, TempCurrent.date).join(TempCurrent, Locations.id == TempCurrent.location_id).all()
 	return render_template("index.html", loc=loc)
@@ -73,38 +80,24 @@ def getrecords():
 	func.min(TempHistory.temp),
 	func.avg(TempHistory.temp)).filter(TempHistory.location_id == loc,
 	TempHistory.date > timespan).all()
+
+	ctemp = db.session.query(TempCurrent.tcurrent).filter(TempCurrent.location_id == loc).all()
 	
-	records = {"max":temps[0][0], "min":temps[0][1], "avg":temps[0][2]}
+	records = {"max":temps[0][0], "min":temps[0][1], "avg":temps[0][2], "new":ctemp}
 
 	return jsonify(records)
 
 # User can add new temperatures via the POST method
 @app.route("/add", methods=["GET", "POST"])
 def add():
-	if request.method == "GET":
-		return render_template("add.html", loc=get_locations())
-	else:
+	if request.method == "POST":
 		temp = request.form.get("temp")
 		loc = request.form.get("location")
 		null_check(temp, "temperature")
 		null_check(loc, "location")
+		add_temperature(temp, loc)
 		
-		# Add temp to history table
-		db.session.add(TempHistory(loc, temp))
-		
-		# Add temp to current and check if the temp is a new record
-		cur = db.session.query(TempCurrent).filter(TempCurrent.location_id == loc).first()
-		cur.tcurrent = temp
-		cur.date = datetime.utcnow()
-		
-		if float(temp) > float(cur.tmax):
-			cur.tmax = temp
-		elif float(temp) < float(cur.tmin):
-			cur.tmin = temp
-			
-		db.session.commit()
-		
-		return render_template("add.html", loc=get_locations())
+	return render_template("add.html", loc=get_locations())
 		
 # Used for building the drop down menus for locations
 def get_locations():
@@ -134,6 +127,22 @@ def update_temprecords(h):
 			cur.tmax = cur.tcurrent
 			cur.tmin = cur.tcurrent
 		db.session.commit()
+
+def add_temperature(temp, loc):
+	# Add temp to history table
+	db.session.add(TempHistory(loc, temp))
+	
+	# Add temp to current and check if the temp is a new record
+	cur = db.session.query(TempCurrent).filter(TempCurrent.location_id == loc).first()
+	cur.tcurrent = temp
+	cur.date = datetime.utcnow()
+	
+	if float(temp) > float(cur.tmax):
+		cur.tmax = temp
+	elif float(temp) < float(cur.tmin):
+		cur.tmin = temp
+		
+	db.session.commit()
 	
 if __name__ == "__main__":
 	app.run()

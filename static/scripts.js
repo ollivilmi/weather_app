@@ -68,6 +68,11 @@ $(document).ready(function() {
 				+"<div class='list-group'>"
 
 				+"<li class='list-group-item'>"
+				+"<h4 class='list-group-item-heading'>Uusin havainto</h4>"
+				+"<p class='list-group-item-text'>"+recordquery.new+"&deg;C</p>" 
+				+"</li>"
+
+				+"<li class='list-group-item'>"
 				+"<h4 class='list-group-item-heading'>Korkein lämpötila</h4>"
 				+"<p class='list-group-item-text'>"+recordquery.max+"&deg;C</p>" 
 				+"</li>"
