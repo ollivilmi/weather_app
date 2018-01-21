@@ -49,7 +49,8 @@ def gethistory():
 	
 	timespan = datetime.utcnow() - timedelta(days=days)
 		
-	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc, TempHistory.date > timespan).all()
+	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc,
+	TempHistory.date > timespan).order_by(TempHistory.date.desc()).all()
 	history = [dict(temp=row.temp,date=row.date) for row in data]
 	
 	return jsonify(history)
