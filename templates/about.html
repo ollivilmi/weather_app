@@ -12,17 +12,23 @@
 		<form id="getlocation">
 			<fieldset>
 				<div class="form-group">
-					<select name="location" id="location">
+					<select name="location" id="loc">
 						{% for l in loc %}
 						<option value="{{ l.id }}">{{ l.name }}</option>
 						{% endfor %}
 					</select>
 				</div>
+				<div class="slidecontainer" id="slider">
+					<input type="range" id="range" name="range" min=2 max=50 value=2 placeholder="2"/>
+				</div>
+				<h5>Havaintojen lkm: <span class="label label-default" id="slidervalue"></span></h5>
 				<div class="form-group">
 					<button class="btn btn-default" type="submit">Hae</button>
 				</div>
 			</fieldset>
 		</form>
+
+		<script src="{{ url_for('static', filename='scripts_slider.js') }}"></script>
 		<ul id="tempRecords" class="list-group"></ul>
 		<canvas id="tempChart"></canvas>
 {% endblock %}

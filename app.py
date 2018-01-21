@@ -17,7 +17,7 @@ from models import *
 # Opening the main page updates and shows a table of min/max temperatures during the last 24 hours
 @app.route("/")
 def index():
-	update_temprecords()
+	update_temprecords(24)
 	loc = db.session.query(Locations.name, TempCurrent.tmin, TempCurrent.tmax,\
 	TempCurrent.tcurrent, TempCurrent.date).join(TempCurrent, Locations.id == TempCurrent.location_id).all()
 	return render_template("index.html", loc=loc)
@@ -52,22 +52,27 @@ def gethistory():
 def getlocation():
 	loc = request.args.get("loc")
 	null_check(loc, "location")
+	lim = request.args.get("lim")
+	null_check(lim, "limit")
 		
-	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc).order_by(TempHistory.date.desc()).limit(10).all()
+	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc).order_by(TempHistory.date.desc()).limit(lim).all()
 	temps = [dict(temp=row.temp, date=row.date) for row in data]
 	
 	return jsonify(temps)
 
-# Returns lifetime max, min and avg for a location.
+# From the 24 hrs max, min and avg for a location.
 @app.route("/getrecords")
 def getrecords():
 	loc = request.args.get("loc")
 	null_check(loc, "location")
 
+	timespan = datetime.utcnow() - timedelta(hours=24)
+
 	temps = db.session.query(
 	func.max(TempHistory.temp),
 	func.min(TempHistory.temp),
-	func.avg(TempHistory.temp)).filter(TempHistory.location_id == loc).all()
+	func.avg(TempHistory.temp)).filter(TempHistory.location_id == loc,
+	TempHistory.date > timespan).all()
 	
 	records = {"max":temps[0][0], "min":temps[0][1], "avg":temps[0][2]}
 
@@ -111,9 +116,9 @@ def null_check(argument, name):
 
 # Checks the database for the records during the last 24 hours and updates them to the CurrentTemps table.
 # This is called when the index page is opened.
-def update_temprecords():
+def update_temprecords(h):
 	
-	timespan = datetime.utcnow() - timedelta(hours=24)
+	timespan = datetime.utcnow() - timedelta(hours=h)
 	
 	# Update max/min temps from last 24 hours
 	for i in range(1,6):

@@ -3,7 +3,7 @@ $(document).ready(function() {
 	// Builds a list from TempHistory filtered by amount of days selected by the user.
 	$('#gethistory').submit(function() 
 	{
-		var url = Flask.url_for("gethistory")+"?loc="+$('#loc').val()+"&days="+$('#days').val();
+		var url = Flask.url_for("gethistory")+"?loc="+$('#loc').val()+"&days="+$('#range').val();
 		var results = "";
 
 		$.getJSON(url, function(data) 
@@ -21,7 +21,7 @@ $(document).ready(function() {
 	// AJAX2 - Gets all time max/min/avg temperatures for the location
 	$('#getlocation').submit(function()
 	{
-		var url = Flask.url_for("getlocation")+"?loc="+$('#location').val();
+		var url = Flask.url_for("getlocation")+"?loc="+$('#loc').val()+"&lim="+$('#range').val();
 			
 		$.getJSON(url, function(tempquery)
 		{
@@ -41,7 +41,7 @@ $(document).ready(function() {
 				data: {
 					labels: dates.reverse(),
 					datasets: [{
-						label: "Uusimmat havainnot",
+						label: "Viimeiset havainnot (max "+$('#range').val()+")",
 						fill: false,
 						borderColor: 'rgb(173,216,230)',
 						data: temps.reverse(),
@@ -58,14 +58,33 @@ $(document).ready(function() {
 			});
 			
 		});
-		url = Flask.url_for("getrecords")+"?loc="+$('#location').val();
+		url = Flask.url_for("getrecords")+"?loc="+$('#loc').val();
 
 		$.getJSON(url, function(recordquery)
 		{
-		$('#tempRecords').html("<li class='list-group-item'>Korkein: "+recordquery.max+"&deg;C</li>"
-		+"<li class='list-group-item'> Matalin: "+recordquery.min+"&deg;C</li>"
-		+"<li class='list-group-item'> Keskiarvo: " +Math.round(recordquery.avg*100)/100+"&deg;C</li>");
+			if (recordquery.avg != null)
+			{
+				$('#tempRecords').html("<h2>Viimeiset 24 tuntia</h2>"
+				+"<div class='list-group'>"
 
+				+"<li class='list-group-item'>"
+				+"<h4 class='list-group-item-heading'>Korkein lämpötila</h4>"
+				+"<p class='list-group-item-text'>"+recordquery.max+"&deg;C</p>" 
+				+"</li>"
+
+				+"<li class='list-group-item'>"
+				+"<h4 class='list-group-item-heading'>Matalin lämpötila</h4>"
+				+"<p class='list-group-item-text'>"+recordquery.min+"&deg;C</p>"
+				+"</li>"
+
+				+"<li class='list-group-item'>"
+				+"<h4 class='list-group-item-heading'>Keskiarvo</h4>"
+				+"<p class='list-group-item-text'>"+Math.round(recordquery.avg*100)/100+"&deg;C</p>" 
+				+"</li>"
+
+				+"</div>");
+			}
+			else $('#tempRecords').html("");
 		});
 		return false;
 	});

@@ -1,7 +1,7 @@
 $(function() {
 	// Script for the slider
 
-	var slider = document.getElementById("days");
+	var slider = document.getElementById("range");
 	var output = document.getElementById("slidervalue");
 	var selection = document.getElementById("loc");
 	output.innerHTML = slider.value;
