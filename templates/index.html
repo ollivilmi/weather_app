@@ -5,34 +5,26 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Sää</h1>
-	<table class="table table-striped table-dark">
+	<table class="table table-striped">
 		<caption>24 tuntia</caption>
-		<thead>
+		<thead class="thead-dark">
 			<th scope="col">Havaintopiste</th>
 			<th scope="col">Max</th>
 			<th scope="col">Min</th>
-			<th scope="col">Nyt</th>
-			<th scope"col">Viimeisin pvm</th>
+			<th scope="col">Keskiarvo</th>
+			<th scope="col">Uusin</th>
+			<th scope="col">Viimeisin pvm</th>
 		</thead>
-		<tbody>
-			{% for l in loc %}
-				<tr>
-					<th scope="row">{{ l.name }}</td>
-					<td>{{ l.tmax }}°C</td>
-					<td>{{ l.tmin }}°C</td>
-					<td>{{ l.tcurrent }}°C</td>
-					<td>{{ l.date }}</td>
-				</tr>
-			{% endfor %}
+		<tbody id="indextable">
 		</tbody>
 	</table>
 	<form action="{{ url_for('index') }}" method="post">
-			<fieldset>
-				<div class="form-group">
-					<h4>Lisää satunnaisia lämpötiloja <small>(testaamista varten)</small></h4>
-					<button class="btn btn-default" type="submit">Lisää</button>
-				</div>
-			</fieldset>
-		</form>
+		<fieldset>
+			<div class="form-group">
+				<h4>Lisää satunnaisia lämpötiloja <small>(testaamista varten)</small></h4>
+				<button class="btn btn-default" type="submit">Lisää</button>
+			</div>
+		</fieldset>
+	</form>
+	<script src="{{ url_for('static', filename='scripts_table.js') }}"></script>
 {% endblock %}

@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_jsglue import JSGlue
 import psycopg2
+from statistics import mean
 
 app = Flask(__name__)
 JSGlue(app)
@@ -18,16 +19,12 @@ from models import *
 # Opening the main page updates and shows a table of min/max temperatures during the last 24 hours
 @app.route("/", methods=["GET", "POST"])
 def index():
-	if request.method == "GET":
-		update_temprecords(24)
-	else:
+	if request.method == "POST":
 		for i in range (1, 6):
 			for j in range (0, 10):
 				add_temperature(round(random.uniform(-25, 35), 2), i)
 			
-	loc = db.session.query(Locations.name, TempCurrent.tmin, TempCurrent.tmax,\
-	TempCurrent.tcurrent, TempCurrent.date).join(TempCurrent, Locations.id == TempCurrent.location_id).all()
-	return render_template("index.html", loc=loc)
+	return render_template("index.html")
 	
 @app.route("/about")
 def about():
@@ -68,25 +65,58 @@ def getlocation():
 	
 	return jsonify(temps)
 
-# From the 24 hrs max, min and avg for a location.
+# From the amount of recent tempereratures, get records
 @app.route("/getrecords")
 def getrecords():
 	loc = request.args.get("loc")
 	null_check(loc, "location")
+	lim = request.args.get("lim")
+	null_check(lim, "limit")
 
 	timespan = datetime.utcnow() - timedelta(hours=24)
 
-	temps = db.session.query(
-	func.max(TempHistory.temp),
-	func.min(TempHistory.temp),
-	func.avg(TempHistory.temp)).filter(TempHistory.location_id == loc,
-	TempHistory.date > timespan).all()
+	temps = db.session.query(TempHistory.temp).filter(
+		TempHistory.location_id == loc).order_by(
+			TempHistory.date.desc()).limit(lim).all()
 
-	ctemp = db.session.query(TempCurrent.tcurrent).filter(TempCurrent.location_id == loc).all()
-	
-	records = {"max":temps[0][0], "min":temps[0][1], "avg":temps[0][2], "new":ctemp}
+	ctemp = db.session.query(TempHistory.temp, TempHistory.date).filter(
+		TempHistory.location_id == loc).order_by(
+		TempHistory.date.desc()).first()
+
+	records = {"max":max(temps), "min":min(temps), "new":ctemp.temp, "date":ctemp.date}
 
 	return jsonify(records)
+
+@app.route("/getallrecords")
+def getallrecords():
+	h = request.args.get("hours")
+	null_check(h, "hours")
+
+	timespan = datetime.utcnow() - timedelta(hours=int(h))
+
+	records = []
+	for i in range(1, 6):
+		records.append(db.session.query(
+		func.max(TempHistory.temp),
+		func.min(TempHistory.temp),
+		func.avg(TempHistory.temp)).filter(
+		TempHistory.date > timespan, 
+		TempHistory.location_id == i).all())
+
+	ctemps = []
+	for i in range(1, 6):
+		ctemps.append(db.session.query(TempHistory.temp, TempHistory.date)
+		.filter(TempHistory.location_id == i)
+		.order_by(TempHistory.date.desc()).first())
+	
+	loc = get_locations()
+
+	table = []
+	for i in range(0, 5):
+		table.append({"max":records[i][0][0], "min":records[i][0][1], "avg":records[i][0][2], 
+		"cur":ctemps[i][0], "date":ctemps[i][1], "loc":loc[i].name})
+
+	return jsonify(table)
 
 # User can add new temperatures via the POST method
 @app.route("/add", methods=["GET", "POST"])
@@ -107,27 +137,6 @@ def get_locations():
 def null_check(argument, name):
 	if argument == None:
 		raise RunTimeError(name + " missing")
-
-# Checks the database for the records during the last 24 hours and updates them to the CurrentTemps table.
-# This is called when the index page is opened.
-def update_temprecords(h):
-	
-	timespan = datetime.utcnow() - timedelta(hours=h)
-	
-	# Update max/min temps from last 24 hours
-	for i in range(1,6):
-		loc = db.session.query(TempHistory.temp)\
-		.filter(TempHistory.location_id == i, (TempHistory.date > timespan)).all()
-		
-		cur = db.session.query(TempCurrent).filter(TempCurrent.location_id == i).first()
-		
-		if loc:
-			cur.tmax = max(loc)
-			cur.tmin = min(loc)
-		else:
-			cur.tmax = cur.tcurrent
-			cur.tmin = cur.tcurrent
-		db.session.commit()
 
 def add_temperature(temp, loc):
 	# Add temp to history table

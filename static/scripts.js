@@ -60,14 +60,14 @@ $(document).ready(function() {
 			});
 			
 		});
-		url = Flask.url_for("getrecords")+"?loc="+$('#loc').val();
+		url = Flask.url_for("getrecords")+"?loc="+$('#loc').val()+"&lim="+$('#range').val();
+		console.log(url);
 
 		$.getJSON(url, function(recordquery)
 		{
-			if (recordquery.avg != null)
+			if (recordquery.max != null)
 			{
-				$('#tempRecords').html("<h2>Viimeiset 24 tuntia</h2>"
-				+"<div class='list-group'>"
+				$('#tempRecords').html("<div class='list-group'>"
 
 				+"<li class='list-group-item'>"
 				+"<h4 class='list-group-item-heading'>Uusin havainto</h4>"
@@ -82,11 +82,6 @@ $(document).ready(function() {
 				+"<li class='list-group-item'>"
 				+"<h4 class='list-group-item-heading'>Matalin lämpötila</h4>"
 				+"<p class='list-group-item-text'>"+recordquery.min+"&deg;C</p>"
-				+"</li>"
-
-				+"<li class='list-group-item'>"
-				+"<h4 class='list-group-item-heading'>Keskiarvo</h4>"
-				+"<p class='list-group-item-text'>"+Math.round(recordquery.avg*100)/100+"&deg;C</p>" 
 				+"</li>"
 
 				+"</div>");
