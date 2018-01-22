@@ -31,7 +31,7 @@ def index():
 	
 @app.route("/about")
 def about():
-		return render_template("about.html", loc=get_locations())
+	return render_template("about.html", loc=get_locations())
     
 @app.route("/history")
 def history():

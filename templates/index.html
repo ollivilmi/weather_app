@@ -6,20 +6,19 @@
 
 {% block main %}
 	<h1>Sää</h1>
-	<table class="table table-condensed">
-		<caption>Viimeiset 24 tuntia (tai viimeisin havainto)</caption>
+	<table class="table table-striped table-dark">
+		<caption>24 tuntia</caption>
 		<thead>
-			<th>Havaintopiste</th>
-			<th>Max</th>
-			<th>Min</th>
-			<th>Nyt</th>
-			<th>Viimeisin pvm</th>
+			<th scope="col">Havaintopiste</th>
+			<th scope="col">Max</th>
+			<th scope="col">Min</th>
+			<th scope="col">Nyt</th>
+			<th scope"col">Viimeisin pvm</th>
 		</thead>
-		<br/>
 		<tbody>
 			{% for l in loc %}
 				<tr>
-					<td>{{ l.name }}</td>
+					<th scope="row">{{ l.name }}</td>
 					<td>{{ l.tmax }}°C</td>
 					<td>{{ l.tmin }}°C</td>
 					<td>{{ l.tcurrent }}°C</td>

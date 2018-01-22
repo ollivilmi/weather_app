@@ -39,53 +39,6 @@ main img
     max-width: 100%;
 }
 
-main td
-{
-    /* left-align tables' cells */
-    text-align: left;
-}
-
-table {
-    border: 1px solid black;
-    padding: none;
-    border-collapse: collapse;
-    text-align: center;
-}
-
-caption {
-    font-weight: bold;
-    border: 1px solid black;
-    border-bottom: none;
-    font-size: 1.2em;
-}
-
-thead {
-    background-color: lightgrey;
-    font-size: 1.1em;
-    border: none;
-}
-
-table {
-    width: 45%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-table, th, td {
-    border: 1px solid black;
-    text-align: center;
-    vertical-align: middle;
-}
-
-td {
-    background-color: #F0F0F0;
-}
-
-th {
-    height: 30px;
-	width: 40px;
-}
-
 ul {
     list-style-type: none;
 }
