@@ -5,18 +5,23 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Historia</h1>
+	<br>
+	<div class="card">
+		<div class="card-body">
+			<h2 class="card-title">
+				<a data-toggle="collapse" href="#collapse2">Historia</a>
+			</h2>
 		<form id="gethistory">
 			<fieldset>
 				<div class="form-group">
-					<select name="location" id="loc">
+					<select name="location" id="loc" class="soflow">
 						{% for l in loc %}
 						<option value="{{ l.id }}">{{ l.name }}</option>
 						{% endfor %}
 					</select>
 				</div>
 				<div class="slidecontainer" id="slider">
-					<input type="range" id="range" name="range" min=1 max=30 value=1 placeholder="1"/>
+					<input type="range" class="slider" id="range" name="range" min=1 max=30 value=1 placeholder="1"/>
 				</div>
 				<h5>Päivää: <span class="label label-default" id="slidervalue"></span></h5>
 				<div class="form-group">
@@ -24,6 +29,9 @@
 				</div>
 			</fieldset>
 		</form>
-		<ul id="historyresults"></ul>
-		<script src="{{ url_for('static', filename='scripts_slider.js') }}"></script>
+		</div>
+	</div>
+	<br><br>
+	<ul id="historyresults"></ul>
+	<script src="{{ url_for('static', filename='scripts_slider.js') }}"></script>
 {% endblock %}

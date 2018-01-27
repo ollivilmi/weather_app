@@ -6,8 +6,8 @@
 
 {% block main %}
 	<table class="table table-striped">
-		<caption>24 tuntia</caption>
-		<thead class="thead-dark">
+		<caption id="hourvalue"></caption>
+		<thead class="thead">
 			<th scope="col">Havaintopiste</th>
 			<th scope="col">Max</th>
 			<th scope="col">Min</th>
@@ -18,13 +18,54 @@
 		<tbody id="indextable">
 		</tbody>
 	</table>
-	<form action="{{ url_for('index') }}" method="post">
-		<fieldset>
-			<div class="form-group">
-				<h4>Lisää satunnaisia lämpötiloja <small>(testaamista varten)</small></h4>
-				<button class="btn btn-default" type="submit">Lisää</button>
+
+	<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">
+				<a data-toggle="collapse" href="#collapse1">Aikaväli</a>
+			</h4>
+			<div id="collapse1" class="panel-collapse collapse">
+				<div class="panel-body">
+					<form id="changetable">
+						<fieldset class="box">
+							<div class="slidecontainer" id="slider">
+								<input type="range" class="slider" id="range" name="range" min=1 max=100 value=24 placeholder="24"/>
+							</div>
+							<h5><span class="badge" id="slidervalue"></span>tunnilta</h5>
+							<div class="form-group">
+								<button class="btn btn-default" type="submit">Hae</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
 			</div>
-		</fieldset>
-	</form>
+		</div>
+	</div>
+
+	<br><br>
+
+	<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">
+				<a data-toggle="collapse" href="#collapse2">Testaamista varten</a>
+			</h4>
+			<div id="collapse2" class="panel-collapse collapse">
+				<div class="panel-body">
+					<form action="{{ url_for('index') }}" method="post">
+						<fieldset>
+							<div class="form-group">
+								<p class="card-text">Lisää satunnaisia lämpötiloja</p>
+								<button class="btn btn-default" type="submit">Lisää</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 	<script src="{{ url_for('static', filename='scripts_table.js') }}"></script>
+	<script src="{{ url_for('static', filename='scripts_slider.js') }}"></script>
 {% endblock %}

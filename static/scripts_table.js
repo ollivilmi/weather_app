@@ -1,11 +1,8 @@
 $(function() {
 
-	// Script for creating the table
-    var url = Flask.url_for("getallrecords")+"?hours=24";
-    var results = "";
-
-    $.getJSON(url, function(data) 
+    function createTable(data, hours) 
     {
+        $('#hourvalue').html(hours + " tuntia");
         for (var i = 0; i < data.length; i++)
         {
             results += "<tr>"
@@ -31,6 +28,24 @@ $(function() {
             +"</tr>";
         }
         $('#indextable').html(results);
+    }
+
+	// Script for creating the table
+    var url = Flask.url_for("getallrecords")+"?hours=24";
+    var results = "";
+
+    $.getJSON(url, function(data){
+        createTable(data, 24);
     });
-    return false;
+    
+    $('#changetable').submit(function(){
+
+        url = Flask.url_for("getallrecords")+"?hours="+$('#range').val();
+        results = "";
+
+        $.getJSON(url, function(data){
+            createTable(data, $('#range').val());
+        });
+        return false;
+    });
 });

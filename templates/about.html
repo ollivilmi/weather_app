@@ -7,19 +7,24 @@
 {% block main %}
 	<!--Chart.js to graph location's most recent temperatures-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>	
-	
-	<h1>Havaintopisteet</h1>
+
+	<br>
+	<div class="card">
+		<div class="card-body">
+			<h2 class="card-title">
+				<a data-toggle="collapse" href="#collapse2">Havaintopisteet</a>
+			</h2>
 		<form id="getlocation">
 			<fieldset>
 				<div class="form-group">
-					<select name="location" id="loc">
+					<select name="location" id="loc" class="soflow">
 						{% for l in loc %}
 						<option value="{{ l.id }}">{{ l.name }}</option>
 						{% endfor %}
 					</select>
 				</div>
 				<div class="slidecontainer" id="slider">
-					<input type="range" id="range" name="range" min=2 max=50 value=2 placeholder="2"/>
+					<input type="range" class="slider" id="range" name="range" min=2 max=50 value=2 placeholder="2"/>
 				</div>
 				<h5>Havaintojen lkm: <span class="label label-default" id="slidervalue"></span></h5>
 				<div class="form-group">
@@ -27,6 +32,9 @@
 				</div>
 			</fieldset>
 		</form>
+		</div>
+	</div>
+	<br><br>
 
 		<script src="{{ url_for('static', filename='scripts_slider.js') }}"></script>
 		<ul id="tempRecords" class="list-group"></ul>
