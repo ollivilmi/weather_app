@@ -8,9 +8,9 @@
 	<br>
 	<div class="card">
 		<div class="card-body">
-			<h2 class="card-title">
-				<a data-toggle="collapse" href="#collapse2">Lisää lämpötila</a>
-			</h2>
+				<h2>
+					Uusi lämpötila
+				</h2>
 		<form action="{{ url_for('add') }}" method="post">
 			<fieldset>
 				<div class="form-group">
@@ -21,7 +21,7 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<input type=number min=-100 max= 100 step="0.01" value=0 name="temp" placeholder="Celsius"/>
+					<input type=number class="number" min=-100 max= 70 step="0.01" value=0 name="temp" placeholder="Celsius"/>
 				</div>
 				<br>
 				<div class="form-group">

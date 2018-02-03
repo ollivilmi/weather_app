@@ -65,7 +65,7 @@ def getlocation():
 	
 	return jsonify(temps)
 
-# From the amount of recent tempereratures, get records
+# From the amount of recent tempereratures, get records (min, max, newest) for a location
 @app.route("/getrecords")
 def getrecords():
 	loc = request.args.get("loc")
@@ -87,6 +87,7 @@ def getrecords():
 
 	return jsonify(records)
 
+# Gets temperature records (min, max, avg, newest) for all locations to build a table
 @app.route("/getallrecords")
 def getallrecords():
 	h = request.args.get("hours")
@@ -136,21 +137,17 @@ def get_locations():
 
 def null_check(argument, name):
 	if argument == None:
-		raise RunTimeError(name + " missing")
+		raise RuntimeError(name + " missing")
 
 def add_temperature(temp, loc):
-	# Add temp to history table
+	# Check that the temperature is within reasonable limits
+	try:
+		ftemp = float(temp)
+		if (ftemp > 70 or ftemp <-100):
+			return
+	except:
+		return
 	db.session.add(TempHistory(loc, temp))
-	
-	# Add temp to current and check if the temp is a new record
-	cur = db.session.query(TempCurrent).filter(TempCurrent.location_id == loc).first()
-	cur.tcurrent = temp
-	cur.date = datetime.utcnow()
-	
-	if float(temp) > float(cur.tmax):
-		cur.tmax = temp
-	elif float(temp) < float(cur.tmin):
-		cur.tmin = temp
 		
 	db.session.commit()
 	
