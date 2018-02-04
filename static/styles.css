@@ -10,14 +10,31 @@
     font-family: 'Encode Sans', sans-serif
 }
 
+html {
+    height: 100%;
+}
+
 body {
     background-image: url(clouds.jpg);
     background-repeat: repeat;
     background-color: #afbbcb;
+    min-height: 100%;
 }
 
 .navbar {
     border-radius: 5px;
+    background: #076585;
+    background: -webkit-linear-gradient(to left, #fff, #076585); 
+    background: linear-gradient(to left, #fff, #076585); 
+}
+
+nav a {
+    padding: 0.3em;
+}
+
+nav a:hover {
+    background-color: #5b99ae;
+    border-radius: 10px;
 }
 
 main .form-control
@@ -40,13 +57,14 @@ td {
 
 .curtemp .tooltiptext {
     visibility: hidden;
-    width: 120px;
+    width: 13em;
     background-color: white;
     color: black;
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
     position: absolute;
+    right: 10%;
     z-index: 1;
 }
 
@@ -64,6 +82,11 @@ footer {
     width: 100%;
     border-radius: 5px;
     height: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    background: #076585;
+    background: -webkit-linear-gradient(to right, #fff, #076585); 
+    background: linear-gradient(to right, #fff, #076585); 
 }
 
 .number {
@@ -74,26 +97,47 @@ footer {
     outline-width: 0;
 }
 
-h4 a {
-    color: grey;
+.bg-bluewhite {
+    background: #076585;
+    color: white;
 }
 
-h4 a:hover {
-    color: lightgrey;
+h4 a {
+    border-radius: 10px;
+    padding: 0.4em;
+    margin-bottom: 0.5em; 
+}
+
+.bg-bluewhite:hover {
+    background: #0d7294bd;
+    color: white;
+    text-decoration: none;
 }
 
 footer a {
-    color: grey;
+    color: white;
 }
 
 footer a:hover {
-    color: lightgrey;
+    color: lightblue;
+    text-decoration: none;
 }
 
 .card {
     display: inline-block;
     min-width: 50%;
-    background-color: rgba(0,0,0,.05);
+    border: none;
+    border-radius: 10px;
+}
+
+.blue-gradient {
+    color: white;
+    -webkit-box-shadow: 10px 9px 31px -2px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 9px 31px -2px rgba(0,0,0,0.75);
+    box-shadow: 10px 9px 31px -2px rgba(0,0,0,0.75);
+    background: #1c92d2;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #f2fcfe, #1c92d2);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #f2fcfe, #1c92d2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 main img
@@ -118,6 +162,7 @@ ul {
 
 /* The slider itself */
 .slider {
+    margin-top: 0.3em;
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
     width: 100%; /* Full-width */
@@ -140,15 +185,24 @@ ul {
     appearance: none;
     width: 25px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #4CAF50; /* Green background */
+    background: #1f93d2; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
 .slider::-moz-range-thumb {
     width: 25px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #4CAF50; /* Green background */
+    background: #1f93d2; /* Green background */
     cursor: pointer; /* Cursor on hover */
+}
+
+.bg-blue {
+    background: #1f93d2;
+    border-radius: 8px;
+}
+
+.list-group-item {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 /* CSS for select form from https://codepen.io/ericrasch/pen/zjDBx */
