@@ -23,8 +23,8 @@ $(function() {
             else
                 results += "<td> - </td>";              
             
-            results += "<td>"+data[i].cur+"&deg;C</td>"    
-            +"<td>"+data[i].date+"</td>"
+            results += "<td class='curtemp'>"+data[i].cur+"&deg;C"
+            +"<span class='tooltiptext'>"+data[i].date+"</span></td>"
             +"</tr>";
         }
         $('#indextable').html(results);
