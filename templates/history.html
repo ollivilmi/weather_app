@@ -14,7 +14,7 @@
 		<form id="gethistory">
 			<fieldset>
 				<div class="form-group">
-					<select name="location" id="loc" class="soflow">
+					<select name="location" id="loc" class="selector bg-bluewhite">
 						{% for l in loc %}
 						<option value="{{ l.id }}">{{ l.name }}</option>
 						{% endfor %}
@@ -23,7 +23,7 @@
 				<div class="slidecontainer" id="slider">
 					<input type="range" class="slider" id="range" name="range" min=1 max=30 value=1 placeholder="1"/>
 				</div>
-				<h5>Päivää: <span class="badge badge-pill bg-blue" id="slidervalue"></span></h5>
+				<h5>Päivää: <input type="number" min=1 class="number" value=1 id="slidervalue"></h5>
 				<div class="form-group">
 					<button class="btn btn-default bg-bluewhite" type="submit">Hae</button>
 				</div>

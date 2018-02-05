@@ -7,6 +7,10 @@ $(function() {
 	output.innerHTML = slider.value;
 	
 	slider.oninput = function() {
-		output.innerHTML = this.value;
+		output.value = this.value;
+	}
+
+	slidervalue.oninput = function() {
+		range.value = this.value;
 	}
 });

@@ -3,7 +3,7 @@ $(document).ready(function() {
 	// Builds a list from TempHistory filtered by amount of days selected by the user.
 	$('#gethistory').submit(function() 
 	{
-		var url = Flask.url_for("gethistory")+"?loc="+$('#loc').val()+"&days="+$('#range').val();
+		var url = Flask.url_for("gethistory")+"?loc="+$('#loc').val()+"&days="+$('#slidervalue').val();
 		var results = "";
 
 		$.getJSON(url, function(data) 
@@ -23,8 +23,9 @@ $(document).ready(function() {
 	// AJAX2 - Gets all time max/min/avg temperatures for the location
 	$('#getlocation').submit(function()
 	{
-		var url = Flask.url_for("getlocation")+"?loc="+$('#loc').val()+"&lim="+$('#range').val();
-			
+		var url = Flask.url_for("getlocation")+"?loc="+$('#loc').val()+"&lim="+$('#slidervalue').val();
+		$('#locrecords').css("display", "block");
+		
 		$.getJSON(url, function(tempquery)
 		{
 			var dates = [];
@@ -43,7 +44,7 @@ $(document).ready(function() {
 				data: {
 					labels: dates.reverse(),
 					datasets: [{
-						label: "Viimeiset havainnot (max "+$('#range').val()+")",
+						label: "Viimeiset havainnot (max "+$('#slidervalue').val()+")",
 						fill: false,
 						borderColor: 'rgb(173,216,230)',
 						data: temps.reverse(),
@@ -60,7 +61,7 @@ $(document).ready(function() {
 			});
 			
 		});
-		url = Flask.url_for("getrecords")+"?loc="+$('#loc').val()+"&lim="+$('#range').val();
+		url = Flask.url_for("getrecords")+"?loc="+$('#loc').val()+"&lim="+$('#slidervalue').val();
 		console.log(url);
 
 		$.getJSON(url, function(recordquery)

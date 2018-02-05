@@ -44,7 +44,7 @@ $(function() {
         results = "";
 
         $.getJSON(url, function(data){
-            createTable(data, $('#range').val());
+            createTable(data, $('#slidervalue').val());
         });
         return false;
     });

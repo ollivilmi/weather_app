@@ -17,7 +17,7 @@
 		<form id="getlocation">
 			<fieldset>
 				<div class="form-group">
-					<select name="location" id="loc" class="soflow">
+					<select name="location" id="loc" class="selector bg-bluewhite">
 						{% for l in loc %}
 						<option value="{{ l.id }}">{{ l.name }}</option>
 						{% endfor %}
@@ -26,7 +26,7 @@
 				<div class="slidecontainer" id="slider">
 					<input type="range" class="slider" id="range" name="range" min=2 max=50 value=2 placeholder="2"/>
 				</div>
-				<h5>Havaintojen lkm: <span class="badge badge-pill bg-blue" id="slidervalue"></span></h5>
+				<h5>Havaintojen lkm: <input type="number" max=50 min=2 class="number" value=2 id="slidervalue"></h5>
 				<div class="form-group">
 					<button class="btn btn-default bg-bluewhite" type="submit">Hae</button>
 				</div>
@@ -37,6 +37,8 @@
 	<br><br>
 
 		<script src="{{ url_for('static', filename='scripts_slider.js') }}"></script>
-		<ul id="tempRecords" class="list-group"></ul>
-		<canvas id="tempChart"></canvas>
+		<div id="locrecords">
+			<ul id="tempRecords" class="list-group"></ul>
+			<canvas id="tempChart"></canvas>
+		</div>
 {% endblock %}
