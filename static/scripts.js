@@ -11,8 +11,10 @@ $(document).ready(function() {
 			for (var i = 0; i < data.length; i++)
 			{
 				results += "<li class='list-group-item'>"
-				+"<h5>Lämpötila: <span class='label label-default'>"+data[i].temp+"°C</span></h5>"
-				+"<h5>Päivämäärä: <span class='label label-default'>"+data[i].date+"</span></h5>";
+				+"<h5>Päivämäärä: "+data[i].date+"</h5>"
+				+"<p>Max: "+data[i].max+"</p>"
+				+"<p>Min: "+data[i].min+"</p>"
+				+"<p>Keskiarvo: "+data[i].avg+"</p></li>";
 			}
 			$('#historyresults').html(results);
 		});

@@ -43,13 +43,24 @@ def gethistory():
 	null_check(days, "days")
 
 	days = int(days)
+	history = []
 	
-	timespan = datetime.utcnow() - timedelta(days=days)
-		
-	data = db.session.query(TempHistory).filter(TempHistory.location_id == loc,
-	TempHistory.date > timespan).order_by(TempHistory.date.desc()).all()
-	history = [dict(temp=row.temp,date=row.date) for row in data]
-	
+	for i in range(1, days):
+		current_day = timedelta(days=i)
+		timespan = datetime.today() - current_day
+
+		records = db.session.query(
+		func.max(TempHistory.temp),
+		func.min(TempHistory.temp),
+		func.avg(TempHistory.temp)).filter(
+		TempHistory.location_id == loc,
+		TempHistory.date > timespan, 
+		TempHistory.date < (timespan + current_day)).all()
+
+		if records[0][0] != None:
+			history.append({"max":records[0][0], "min":records[0][1], "avg":records[0][2],
+			"date":timespan.isoformat()[0:10]})
+
 	return jsonify(history)
 
 # Gets up to 10 of the latest temperatures for a given location. Script uses this to build a temperature graph
