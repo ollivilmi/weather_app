@@ -58,7 +58,7 @@ def gethistory():
 		TempHistory.date < (timespan + current_day)).all()
 
 		if records[0][0] != None:
-			history.append({"max":records[0][0], "min":records[0][1], "avg":records[0][2],
+			history.append({"max":records[0][0], "min":records[0][1], "avg":round(records[0][2],2),
 			"date":timespan.isoformat()[0:10]})
 
 	return jsonify(history)
@@ -125,7 +125,7 @@ def getallrecords():
 
 	table = []
 	for i in range(0, 5):
-		table.append({"max":records[i][0][0], "min":records[i][0][1], "avg":records[i][0][2], 
+		table.append({"max":records[i][0][0], "min":records[i][0][1], "avg":round(records[i][0][2],2), 
 		"cur":ctemps[i][0], "date":ctemps[i][1], "loc":loc[i].name})
 
 	return jsonify(table)
