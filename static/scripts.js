@@ -14,7 +14,7 @@ $(document).ready(function() {
 				+"<h5>Päivämäärä: "+data[i].date+"</h5>"
 				+"<p>Max: "+data[i].max+"</p>"
 				+"<p>Min: "+data[i].min+"</p>"
-				+"<p>Keskiarvo: "+data[i].avg+"</p></li>";
+				+"<p>Keskiarvo: "+Math.round(data[i].avg*100)/100+"</p></li>";
 			}
 			$('#historyresults').html(results);
 		});

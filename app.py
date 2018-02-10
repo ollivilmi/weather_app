@@ -44,22 +44,28 @@ def gethistory():
 
 	days = int(days)
 	history = []
+	i = 1
 	
-	for i in range(1, days):
-		current_day = timedelta(days=i)
-		timespan = datetime.today() - current_day
+	while True:
+		previous_day = datetime.today() - timedelta(days=i)
+		current_day = previous_day + timedelta(days=1)
 
 		records = db.session.query(
-		func.max(TempHistory.temp),
-		func.min(TempHistory.temp),
-		func.avg(TempHistory.temp)).filter(
-		TempHistory.location_id == loc,
-		TempHistory.date > timespan, 
-		TempHistory.date < (timespan + current_day)).all()
+			func.max(TempHistory.temp),
+			func.min(TempHistory.temp),
+			func.avg(TempHistory.temp)).filter(
+				TempHistory.location_id == loc,
+				TempHistory.date > previous_day, 
+				TempHistory.date < current_day).all()
 
 		if records[0][0] != None:
-			history.append({"max":records[0][0], "min":records[0][1], "avg":round(records[0][2],2),
-			"date":timespan.isoformat()[0:10]})
+			history.append({"max":records[0][0], "min":records[0][1], "avg":records[0][2],
+			"date":current_day.isoformat()[0:10]})
+
+		if i == days:
+			break
+		else:
+			i+=1
 
 	return jsonify(history)
 
@@ -125,7 +131,7 @@ def getallrecords():
 
 	table = []
 	for i in range(0, 5):
-		table.append({"max":records[i][0][0], "min":records[i][0][1], "avg":round(records[i][0][2],2), 
+		table.append({"max":records[i][0][0], "min":records[i][0][1], "avg":records[i][0][2], 
 		"cur":ctemps[i][0], "date":ctemps[i][1], "loc":loc[i].name})
 
 	return jsonify(table)

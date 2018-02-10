@@ -19,7 +19,7 @@ $(function() {
                 results += "<td> - </td>";
 
             if (data[i].avg != null)
-                results += "<td>"+data[i].avg+"&deg;C</td>";
+                results += "<td>"+Math.round(data[i].avg * 100)/100+"&deg;C</td>";
             else
                 results += "<td> - </td>";              
             
