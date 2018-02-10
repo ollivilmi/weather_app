@@ -18,51 +18,49 @@
 		</tbody>
 	</table>
 
-	<div class="card blue-gradient">
-		<div class="card-body">
-			<h4 class="card-title">
-				<a class="bg-bluewhite" data-toggle="collapse" href="#collapse1">Aikaväli</a>
-			</h4>
-			<div id="collapse1" class="panel-collapse collapse">
-				<div class="panel-body">
-					<form id="changetable">
-						<fieldset class="box">
-							<div class="slidecontainer" id="slider">
-								<input type="range" class="slider" id="range" name="range" min=1 max=100 value=24 placeholder="24"/>
-							</div>
-							<h5><input type="number" class="number" value=24 id="slidervalue"></input> tunnilta</h5>
-							<div class="form-group">
-								<button class="btn btn-default bg-bluewhite" type="submit">Hae</button>
-							</div>
-						</fieldset>
-					</form>
+	<div class="flexmenu">
+		<div class="card card-flex">
+			<div class="card-body">
+				<h4 class="card-title">
+					<a class="bg-bluewhite" data-toggle="collapse" href="#collapse1">Aikaväli</a>
+				</h4>
+				<div id="collapse1" class="panel-collapse collapse">
+					<div class="panel-body">
+						<form id="changetable">
+							<fieldset class="box">
+								<div class="slidecontainer" id="slider">
+									<input type="range" class="slider" id="range" name="range" min=1 max=100 value=24 placeholder="24"/>
+								</div>
+								<h5><input type="number" class="number-white" value=24 id="slidervalue"></input> tunnilta</h5>
+								<div class="form-group">
+									<button class="btn btn-default bg-bluewhite" type="submit">Hae</button>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card card-flex">
+			<div class="card-body">
+				<h4 class="card-title">
+					<a class="bg-bluewhite" data-toggle="collapse" href="#collapse2">Testaa</a>
+				</h4>
+				<div id="collapse2" class="panel-collapse collapse">
+					<div class="panel-body">
+						<form action="{{ url_for('index') }}" method="post">
+							<fieldset>
+								<div class="form-group">
+									<p class="card-text">(Lisää satunnaisia lämpötiloja)</p>
+									<button class="btn btn-default bg-bluewhite" type="submit">Lisää</button>
+								</div>
+							</fieldset>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<br><br>
-
-	<div class="card blue-gradient">
-		<div class="card-body">
-			<h4 class="card-title">
-				<a class="bg-bluewhite" data-toggle="collapse" href="#collapse2">Testaamista varten</a>
-			</h4>
-			<div id="collapse2" class="panel-collapse collapse">
-				<div class="panel-body">
-					<form action="{{ url_for('index') }}" method="post">
-						<fieldset>
-							<div class="form-group">
-								<p class="card-text">Lisää satunnaisia lämpötiloja</p>
-								<button class="btn btn-default bg-bluewhite" type="submit">Lisää</button>
-							</div>
-						</fieldset>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-
 
 
 	<script src="{{ url_for('static', filename='scripts_table.js') }}"></script>

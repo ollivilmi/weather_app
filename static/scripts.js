@@ -48,7 +48,7 @@ $(document).ready(function() {
 					datasets: [{
 						label: "Viimeiset havainnot (max "+$('#slidervalue').val()+")",
 						fill: false,
-						borderColor: 'rgb(173,216,230)',
+						borderColor: 'rgb(220,53,69)',
 						data: temps.reverse(),
 					}]
 				},

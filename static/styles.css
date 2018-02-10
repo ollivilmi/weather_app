@@ -77,6 +77,12 @@ td {
     font-family: 'Encode Sans Expanded', sans-serif;
 }
 
+.flexmenu {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 10em;
+}
+
 .curtemp {
     font-style: italic;
 }
@@ -110,7 +116,6 @@ footer {
     margin-left: auto;
     margin-right: auto;
     background: #d8e7ec;
-    color: 
 }
 
 .number {
@@ -119,6 +124,15 @@ footer {
     background: #dbf6ff3d;
     color: white;
     text-align: center;
+    border-radius: 10px;
+    outline-width: 0;
+}
+
+.number-white {
+    width: 2.5em;
+    border: none;
+    text-align: center;
+    border: 1px solid black;
     border-radius: 10px;
     outline-width: 0;
 }
@@ -167,6 +181,13 @@ footer a:hover {
     min-width: 50%;
     border: none;
     border-radius: 10px;
+}
+
+.card-flex {
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 30%!important;
+    background: none;
 }
 
 .blue-gradient {
